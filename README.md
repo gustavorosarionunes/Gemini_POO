@@ -128,9 +128,5 @@ Clique em "Connect". Você poderá ver a tabela `RECOMMENDATION` com os dados.
 
 ---
 
-Se quiser, eu posso também:
-- Gerar automaticamente um ficheiro ZIP do projecto pronto para download.
-- Incluir instruções de testes unitários / exemplos de chamadas à API Gemini.
-- Gerar um arquivo `README_pt_BR.md` com tradução formal e versão para entrega académica.
 
-Bons testes e sucesso no TCC!
+

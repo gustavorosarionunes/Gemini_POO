@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recomendador de Livros</title>
+
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 90vh;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            width: 100%;
+            max-width: 500px;
+        }
+        .container h1 {
+            font-size: 1.5rem; color: #333; display: flex;
+            align-items: center; gap: 8px;
+        }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label {
+            display: block; margin-bottom: 0.5rem; color: #555;
+        }
+        .form-group input {
+            width: 100%; padding: 0.75rem; box-sizing: border-box;
+            border: 1px solid #ccc; border-radius: 4px;
+        }
+        .btn {
+            width: 100%; padding: 0.85rem; font-size: 1rem;
+            font-weight: 600; color: white; background-color: #007bff;
+            border: none; border-radius: 4px; cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .btn:hover { background-color: #0056b3; }
+        #resultado {
+            margin-top: 1.5rem; padding: 1rem; background-color: #eef;
+            border-radius: 4px; border-left: 5px solid #007bff;
+            display: none;
+        }
+        /* Estilo para o novo link */
+        .link-historico {
+            display: inline-block;
+            text-decoration: none;
+            color: #007bff;
+            font-size: 0.9rem;
+            margin-top: -0.5rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>📚 Recomendador de Livros (Gemini)</h1>
+
+    <a href="/historico" class="link-historico">
+        Ver histórico de solicitações
+    </a>
+
+    <form id="recommend-form">
+        <div class="form-group">
+            <label for="prompt-input">Como você está se sentindo?</label>
+            <input type="text" id="prompt-input" name="prompt" value="feliz" required>
+        </div>
+        <button type="submit" class="btn" id="submit-button">Gerar Recomendação</button>
+    </form>
+
+    <div id="resultado">
+        <p id="resultado-texto" style="white-space: pre-wrap;"></p>
+    </div>
+</div>
+
+<script>
+    document.getElementById('recommend-form').addEventListener('submit', function(event) {
+
+        event.preventDefault();
+
+        const promptInput = document.getElementById('prompt-input');
+        const resultadoDiv = document.getElementById('resultado');
+        const resultadoTexto = document.getElementById('resultado-texto');
+        const submitButton = document.getElementById('submit-button');
+
+        const prompt = encodeURIComponent(promptInput.value);
+
+        resultadoTexto.innerText = "Pensando...";
+        resultadoDiv.style.display = 'block';
+        submitButton.disabled = true;
+        submitButton.innerText = 'Aguarde...';
+
+        fetch(`/api/recommend?prompt=${prompt}`)
+            .then(response => {
+                if (!response.ok) { throw new Error('Erro na rede'); }
+                return response.text();
+            })
+            .then(textoDaRecomendacao => {
+                resultadoTexto.innerText = textoDaRecomendacao;
+            })
+            .catch(error => {
+                console.error('Erro ao buscar recomendação:', error);
+                resultadoTexto.innerText = "Desculpe, ocorreu um erro ao buscar a recomendação.";
+            })
+            .finally(() => {
+                submitButton.disabled = false;
+                submitButton.innerText = 'Gerar Recomendação';
+            });
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histórico de Recomendações</title>
+
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            padding-top: 4rem;
+            min-height: 90vh;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            width: 100%;
+            max-width: 900px;
+        }
+        .container h1 {
+            font-size: 1.5rem; color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 0.75rem;
+            text-align: left;
+            vertical-align: top;
+            /* Garante que o texto longo quebre a linha */
+            word-wrap: break-word;
+        }
+        th {
+            background-color: #f2f2f2;
+            color: #333;
+        }
+        tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .link-voltar {
+            display: inline-block;
+            margin-top: 1.5rem;
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>📚 Histórico de Recomendações</h1>
+
+    <table>
+        <thead>
+        <tr>
+            <th style="width: 10%;">ID</th>
+            <th style="width: 30%;">Pergunta (Prompt)</th>
+            <th style="width: 60%;">Resposta (Recomendação)</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${recommendations.isEmpty()}">
+            <td colspan="3">Nenhuma recomendação encontrada no histórico.</td>
+        </tr>
+
+        <tr th:each="rec : ${recommendations}">
+            <td th:text="${rec.id}">1</td>
+            <td th:text="${rec.prompt}">Feliz</td>
+            <td th:text="${rec.response}" style="white-space: pre-wrap;">Livro X...</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a href="/" class="link-voltar">← Voltar para o Recomendador</a>
+</div>
+
+</body>
+</html>
